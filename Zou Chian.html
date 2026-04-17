@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOLLAR WEB PRO+</title>
+
+<style>
+body{
+    font-family: Arial;
+    margin:0;
+    background: linear-gradient(to right, #141e30, #243b55);
+    color:white;
+    text-align:center;
+}
+
+h1{color:#00ffcc;}
+
+.container{padding:20px;}
+
+.btn{
+    background:#00ffcc;
+    color:black;
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    margin:5px;
+}
+
+.btn:hover{
+    background:#ff4d4d;
+    color:white;
+    transform:scale(1.05);
+}
+
+input{
+    padding:10px;
+    border-radius:5px;
+    border:none;
+    margin:5px;
+}
+
+.video-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:20px;
+}
+
+.card{
+    background:#1e2a38;
+    padding:10px;
+    border-radius:10px;
+}
+
+iframe{border-radius:10px;}
+
+#paymentBox{
+    display:none;
+    background:red;
+    padding:20px;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 DOLLAR WEB PRO+</h1>
+
+<h2>🔥 Featured Videos</h2>
+
+<div class="video-grid">
+
+<div class="card">
+<iframe width="300" height="200" src="https://www.youtube.com/embed/qwzhy0g0HPU" allowfullscreen></iframe>
+</div>
+
+</div>
+
+<!-- AUTO YOUTUBE VIDEOS -->
+<h2>📺 Latest Videos (Auto)</h2>
+<div id="videos" class="video-grid"></div>
+
+<br>
+
+<!-- LOGIN -->
+<h2>🔐 Login</h2>
+<input type="text" id="username" placeholder="Username">
+<button class="btn" onclick="login()">Login</button>
+
+<h2>🆕 Create Account</h2>
+<input type="text" id="newUser" placeholder="New Username">
+<button class="btn" onclick="signup()">Sign Up</button>
+
+<br><br>
+
+<!-- VIDEO PLAYER -->
+<h2>▶️ Premium Video</h2>
+
+<video id="video" width="350" controls controlsList="nodownload">
+<source src="video.mp4" type="video/mp4">
+</video>
+
+<div id="paymentBox">
+<p>⛔ Komeza urebe video wishyure</p>
+<button class="btn" onclick="pay()">Pay Now</button>
+</div>
+
+<br>
+
+<button class="btn" onclick="downloadVideo()">⬇ Download Video</button>
+
+<br><br>
+
+<script>
+let video = document.getElementById("video");
+
+// LOGIN
+function login(){
+    let username = document.getElementById("username").value;
+    if(username){
+        localStorage.setItem("user", username);
+        alert("Welcome " + username);
+    }
+}
+
+// SIGNUP
+function signup(){
+    let user = document.getElementById("newUser").value;
+    if(user){
+        localStorage.setItem("user", user);
+        alert("Account created!");
+    }
+}
+
+// VIDEO LIMIT
+video.addEventListener("timeupdate", function(){
+    if(video.currentTime >= 30 && localStorage.getItem("paid") !== "true"){
+        video.pause();
+        document.getElementById("paymentBox").style.display = "block";
+    }
+});
+
+// PAYMENT
+function pay(){
+    localStorage.setItem("paid", "true");
+    document.getElementById("paymentBox").style.display = "none";
+    video.play();
+}
+
+// DOWNLOAD
+function downloadVideo(){
+    if(localStorage.getItem("paid") === "true"){
+        window.location.href = "video.mp4";
+    } else {
+        alert("Banza wishyure!");
+    }
+}
+
+// =======================
+// 🔥 YOUTUBE API SECTION
+// =======================
+
+// SHYIRAMO API KEY YAWE HANO
+let apiKey = "SHYIRAMO_API_KEY_HANO";
+
+// SHYIRAMO CHANNEL IDs ZAWE
+let channels = [
+  "UC_x5XG1OV2P6uZZ5FSM9Ttw", // example
+  "UC-9-kyTW8ZkZNDHQJ6FgpwQ"  // example
+];
+
+let container = document.getElementById("videos");
+
+// CHECK API KEY
+if(apiKey === "SHYIRAMO_API_KEY_HANO"){
+    container.innerHTML = "<p>⚠️ Shyiramo YouTube API Key yawe kugira videos zigaragare</p>";
+} else {
+
+channels.forEach(channelId => {
+
+fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=6`)
+.then(res => res.json())
+.then(data => {
+
+    data.items.forEach(item => {
+        if(item.id.videoId){
+
+            let div = document.createElement("div");
+            div.className = "card";
+
+            div.innerHTML = `
+            <iframe width="300" height="200"
+            src="https://www.youtube.com/embed/${item.id.videoId}"
+            allowfullscreen></iframe>
+            <p>${item.snippet.title}</p>
+            `;
+
+            container.appendChild(div);
+        }
+    });
+
+})
+.catch(err=>{
+    container.innerHTML = "<p>❌ Failed to load videos</p>";
+});
+
+});
+
+}
+</script>
+
+</div>let extraVideos = [
+{ title:"Jawan (Agasobanuye)", id:"COv52Qyctws" },
+{ title:"Baaghi (Agasobanuye)", id:"m2iFhK9J3pM" },
+{ title:"Bahubali (Agasobanuye)", id:"sOEg_YZQsTI" },
+{ title:"The Whisper of Fate (Agasobanuye)", id:"dQw4w9WgXcQ" },
+{ title:"Guardians of the Dafeng (Agasobanuye)", id:"kXYiU_JCYtU" },
+{ title:"The Journey of Legend (Agasobanuye)", id:"3JZ_D3ELwOQ" },
+
+// ===== IZINDI WASABYE =====
+{ title:"Love and Sword (Agasobanuye)", id:"5PSNL1qE6VY" },
+{ title:"Bee Keeper (Agasobanuye)", id:"SzINZZ6iqxY" },
+{ title:"Tom Yam Gong (Agasobanuye)", id:"G0c7aC4rV9A" },
+{ title:"Dragon Forever (Agasobanuye)", id:"l9R5Zp7H0sU" },
+{ title:"Martin (Agasobanuye)", id:"7hZp9J2kX8E" },
+{ title:"Bademian & Chothemian (Agasobanuye)", id:"3tmd-ClpJxA" },
+{ title:"Van Guard (Agasobanuye)", id:"kZ1vFzqzQ5U" }
+];
+
+</body>
+</html>
